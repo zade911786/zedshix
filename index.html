@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Favicon -->
 <link rel="icon" type="image/png" href="zedshi.png">
 <link rel="shortcut icon" href="zedshi.png" type="image/png">
 <link rel="apple-touch-icon" href="zedshi.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>ZedShiX - Anime & Manga Universe</title>
+<title>ZedShiX - Anime Universe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Cinzel:wght@400;500;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root {
@@ -63,7 +62,7 @@ body{background:#01010a;color:var(--text);font-family:'Outfit',sans-serif;overfl
 .s-to:nth-child(3){bottom:7px;right:-5px;transform:rotate(120deg)}
 .s-circle{top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;box-shadow:0 0 20px 1px #1a0000}
 @keyframes rot{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.loader-text{font-family:'Cinzel Decorative',serif;font-size:2.2rem;letter-spacing:6px;background:linear-gradient(135deg,var(--c2),var(--c3),var(--c4));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:italic;animation:pulseGlow 1.5s ease-in-out infinite}
+.loader-text{font-family:'Bangers',cursive;font-size:2.6rem;letter-spacing:8px;background:linear-gradient(135deg,var(--c2),var(--c3),var(--c4));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:pulseGlow 1.5s ease-in-out infinite}
 .loader-sub{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:3px;color:var(--muted);animation:pulseGlow 1.5s ease-in-out infinite 0.3s}
 @keyframes pulseGlow{0%,100%{opacity:1}50%{opacity:0.3}}
 
@@ -78,12 +77,12 @@ body{background:#01010a;color:var(--text);font-family:'Outfit',sans-serif;overfl
 }
 #navbar:hover{border-color:rgba(151,125,255,0.45)}
 .nav-logo{
-  font-family:'Cinzel Decorative',serif;font-size:1.9rem;letter-spacing:4px;
+  font-family:'Bangers',cursive;font-size:2.2rem;letter-spacing:5px;
   background:linear-gradient(135deg,var(--c2) 0%,var(--c3) 50%,var(--c4) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  font-style:italic;flex-shrink:0;cursor:pointer;
+  flex-shrink:0;cursor:pointer;
   filter:drop-shadow(0 0 14px rgba(151,125,255,0.6));
-  transition:filter 0.3s;font-weight:900;
+  transition:filter 0.3s;font-weight:400;
 }
 .nav-logo:hover{filter:drop-shadow(0 0 24px rgba(151,125,255,0.9))}
 .nav-social{display:flex;gap:6px;align-items:center}
@@ -169,8 +168,8 @@ body{background:#01010a;color:var(--text);font-family:'Outfit',sans-serif;overfl
 }
 .hero-badge .live-dot{width:6px;height:6px;background:#977DFF;border-radius:50%;animation:pulseGlow 1.5s ease infinite;box-shadow:0 0 8px var(--c3)}
 .hero-title{
-  font-family:'Cinzel',serif;font-size:clamp(1.4rem,5vw,2.4rem);line-height:1.1;
-  letter-spacing:1px;margin-bottom:12px;font-style:italic;font-weight:900;
+  font-family:'Bangers',cursive;font-size:clamp(1.6rem,6vw,2.8rem);line-height:1.1;
+  letter-spacing:3px;margin-bottom:12px;font-weight:400;
 }
 .hero-title .grad{
   background:linear-gradient(135deg,#fff 0%,var(--c2) 30%,var(--c3) 60%,var(--c4) 100%);
@@ -220,7 +219,7 @@ body{background:#01010a;color:var(--text);font-family:'Outfit',sans-serif;overfl
 .section{position:relative;z-index:1;padding:70px 40px 40px}
 .section-header{margin-bottom:28px}
 .section-eyebrow{font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:3px;color:var(--c3);text-transform:uppercase;margin-bottom:6px}
-.section-title{font-family:'Cinzel',serif;font-size:2rem;letter-spacing:1px;font-style:italic;font-weight:700;background:linear-gradient(135deg,var(--c1) 0%,var(--c3) 50%,var(--c4) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-title{font-family:'Bangers',cursive;font-size:2.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--c1) 0%,var(--c3) 50%,var(--c4) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .section-row-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
 .see-all-btn{font-family:'Outfit',sans-serif;font-size:0.7rem;letter-spacing:1px;color:var(--c3);cursor:pointer;border:none;background:none;text-transform:uppercase;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);padding:6px 12px;border-radius:20px;font-weight:700;border:1px solid transparent}
 .see-all-btn:hover{color:var(--text);background:var(--glass);border-color:var(--glass-border);transform:scale(1.05)}
@@ -324,7 +323,7 @@ body{background:#01010a;color:var(--text);font-family:'Outfit',sans-serif;overfl
 
 /* ── SEARCH PAGE ── */
 #search-page{padding:80px 40px 40px}
-.search-page-title{font-family:'Cinzel',serif;font-size:2rem;letter-spacing:1px;font-style:italic;font-weight:700;margin-bottom:28px;background:linear-gradient(135deg,var(--c1),var(--c3),var(--c4));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.search-page-title{font-family:'Bangers',cursive;font-size:2.4rem;letter-spacing:4px;margin-bottom:28px;background:linear-gradient(135deg,var(--c1),var(--c3),var(--c4));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .search-page-wrap{display:flex;align-items:center;gap:12px;background:rgba(4,4,26,0.6);border:1px solid var(--glass-border);border-radius:20px;padding:14px 20px;box-shadow:0 0 40px rgba(151,125,255,0.1);margin-bottom:32px;transition:box-shadow 0.3s,border-color 0.3s}
 .search-page-wrap:focus-within{box-shadow:0 0 50px rgba(0,51,255,0.15);border-color:rgba(151,125,255,0.4)}
 .search-page-wrap input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:500}
@@ -361,9 +360,9 @@ body{background:#01010a;color:var(--text);font-family:'Outfit',sans-serif;overfl
 .modal-player{flex:1}
 .player-wrap{width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;border:1px solid var(--glass-border);background:#000;box-shadow:0 0 50px rgba(151,125,255,0.15)}
 .player-wrap iframe{width:100%;height:100%;border:none;display:block}
-.modal-sidebar{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:18px}
+.modal-sidebar{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:18px}
 .modal-info-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:16px;overflow:hidden}
-.modal-poster{width:100%;height:170px;object-fit:cover;border-radius:10px;margin-bottom:12px}
+.modal-poster{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:10px;margin-bottom:12px;display:block;background:#0a0a1a}
 .modal-title{font-family:'Cinzel',serif;font-size:1.1rem;letter-spacing:1px;font-style:italic;margin-bottom:6px}
 .modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .modal-tag{padding:2px 10px;border-radius:20px;background:rgba(151,125,255,0.12);border:1px solid rgba(151,125,255,0.25);font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--c3)}
@@ -377,14 +376,62 @@ body{background:#01010a;color:var(--text);font-family:'Outfit',sans-serif;overfl
 .season-select:focus{border-color:var(--c3)}
 .season-select option{background:#04041a;color:var(--text)}
 
-.ep-list{display:flex;flex-direction:column;gap:5px;max-height:300px;overflow-y:auto;padding-right:4px}
-.ep-list::-webkit-scrollbar{width:3px}
-.ep-list::-webkit-scrollbar-thumb{background:var(--c3);border-radius:2px}
-.ep-btn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text);cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);text-align:left;font-family:'Outfit',sans-serif}
-.ep-btn:hover{background:rgba(151,125,255,0.12);border-color:rgba(151,125,255,0.3);transform:translateX(3px)}
-.ep-btn.active{background:linear-gradient(135deg,rgba(151,125,255,0.2),rgba(0,51,255,0.15));border-color:rgba(0,51,255,0.4)}
-.ep-num{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--c3);min-width:22px}
-.ep-title{font-size:0.75rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ── EPISODE PANEL ── */
+.ep-panel{display:flex;flex-direction:column;gap:8px}
+.ep-search-row{display:flex;gap:6px;align-items:center}
+.ep-search{
+  flex:1;background:rgba(4,4,26,0.7);border:1px solid var(--glass-border);
+  border-radius:10px;padding:7px 11px;color:var(--text);
+  font-family:'Outfit',sans-serif;font-size:0.78rem;
+  transition:border-color 0.2s;outline:none;
+}
+.ep-search:focus{border-color:var(--c3);box-shadow:0 0 0 2px rgba(151,125,255,0.15)}
+.ep-search::placeholder{color:var(--muted)}
+.ep-jump-btn{
+  padding:7px 12px;border-radius:10px;
+  background:linear-gradient(135deg,var(--c3),var(--c4));
+  border:none;color:#fff;font-family:'Outfit',sans-serif;
+  font-size:0.72rem;font-weight:700;cursor:pointer;white-space:nowrap;
+  transition:opacity 0.2s;
+}
+.ep-jump-btn:hover{opacity:0.85}
+.ep-range-tabs{display:flex;gap:4px;flex-wrap:wrap}
+.ep-range-tab{
+  padding:3px 10px;border-radius:20px;border:1px solid var(--glass-border);
+  background:var(--glass);color:var(--muted);font-family:'Space Mono',monospace;
+  font-size:0.58rem;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;
+}
+.ep-range-tab.active,.ep-range-tab:hover{background:rgba(151,125,255,0.18);border-color:var(--c3);color:var(--c3)}
+.ep-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:5px;
+  max-height:320px;overflow-y:auto;padding-right:3px;
+}
+.ep-grid::-webkit-scrollbar{width:3px}
+.ep-grid::-webkit-scrollbar-thumb{background:var(--c3);border-radius:2px}
+.ep-cell{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;background:var(--glass);border:1px solid var(--glass-border);
+  color:var(--muted);font-family:'Space Mono',monospace;font-size:0.68rem;
+  cursor:pointer;transition:all 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  font-weight:700;position:relative;overflow:hidden;
+}
+.ep-cell:hover{background:rgba(151,125,255,0.18);border-color:var(--c3);color:var(--text);transform:scale(1.08)}
+.ep-cell.active{
+  background:linear-gradient(135deg,var(--c3),var(--c4));
+  border-color:transparent;color:#fff;
+  box-shadow:0 3px 12px rgba(0,51,255,0.45);transform:scale(1.08);
+}
+.ep-cell.watched::after{
+  content:'';position:absolute;bottom:3px;right:3px;
+  width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.5);
+}
+.ep-status{font-size:0.72rem;color:var(--muted);text-align:center;padding:12px 0;font-family:'Outfit',sans-serif}
+.ep-count-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--c3);
+  background:rgba(151,125,255,0.1);border:1px solid rgba(151,125,255,0.2);
+  border-radius:20px;padding:2px 8px;margin-bottom:2px;
+}
 .lang-toggle{display:flex;gap:6px;margin-bottom:12px}
 .lang-btn{padding:5px 14px;border-radius:20px;background:var(--glass);border:1px solid var(--glass-border);color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.7rem;cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);letter-spacing:1px;text-transform:uppercase;font-weight:700}
 .lang-btn.active{background:linear-gradient(135deg,var(--c3),var(--c4));color:#fff;border-color:transparent;box-shadow:0 4px 15px rgba(0,51,255,0.4);transform:scale(1.05)}
@@ -608,7 +655,7 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
     </div>
   </div>
   <div class="loader-text">ZedShiX</div>
-  <div class="loader-sub">Anime &amp; Manga Universe</div>
+  <div class="loader-sub">Anime &amp; Movies</div>
 </div>
 
 <!-- ── BACKGROUND ── -->
@@ -646,8 +693,8 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
     <button class="bnav-btn" id="bnav-genre" onclick="showPage('genre')">
       <i class="fa fa-layer-group"></i><span>Genre</span>
     </button>
-    <button class="bnav-btn" id="bnav-manga" onclick="showPage('manga')">
-      <i class="fa fa-book-open"></i><span>Manga</span>
+    <button class="bnav-btn" id="bnav-movies" onclick="showPage('movies')">
+      <i class="fa fa-film"></i><span>Movies</span>
     </button>
     <button class="bnav-btn bnav-insta" id="bnav-insta" onclick="window.open('https://instagram.com/suspend.z','_blank')">
       <i class="fab fa-instagram"></i><span>Insta</span>
@@ -725,18 +772,18 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
 
 <div class="divider"></div>
 
-<!-- ── MANGA SECTION IN HOME ── -->
-<section id="manga-home" class="section">
+<!-- ── ANIME MOVIES SECTION IN HOME ── -->
+<section id="movies-home" class="section">
   <div class="section-row-header">
     <div class="section-header" style="margin-bottom:0">
-      <div class="section-eyebrow">📖 Read</div>
-      <div class="section-title">Manga Library</div>
+      <div class="section-eyebrow">🎬 Cinema</div>
+      <div class="section-title">Anime Movies</div>
     </div>
-    <button class="see-all-btn" onclick="showPage('manga')">See All</button>
+    <button class="see-all-btn" onclick="showPage('movies')">See All</button>
   </div>
   <div class="carousel-wrap">
     <div class="carousel-fade-left"></div>
-    <div class="scroll-row" id="manga-home-row"><div class="section-loading"><div class="loading-spinner"></div></div></div>
+    <div class="scroll-row" id="movies-home-row"><div class="section-loading"><div class="loading-spinner"></div></div></div>
     <div class="carousel-fade-right"></div>
   </div>
 </section>
@@ -748,7 +795,7 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
     <a href="https://instagram.com/suspend.z" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://t.me/zade4everbot" target="_blank"><i class="fab fa-telegram"></i></a>
   </div>
-  <div class="footer-copy">© 2026 ZedShiX — Anime &amp; Manga Universe</div>
+  <div class="footer-copy">© 2025 ZedShiX — Anime Universe</div>
 </footer>
 </div><!-- end #page-home -->
 
@@ -758,7 +805,7 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
   <div class="search-page-title">Search</div>
   <div class="search-page-wrap">
     <i class="fa fa-search search-page-icon"></i>
-    <input id="search-page-input" type="text" placeholder="Search anime, manga..." oninput="doPageSearch(this.value)" autocomplete="off">
+    <input id="search-page-input" type="text" placeholder="Search anime, movies..." oninput="doPageSearch(this.value)" autocomplete="off">
     <button onclick="document.getElementById('search-page-input').value='';clearPageSearch()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px;border-radius:50%;transition:all 0.2s"><i class="fa fa-times"></i></button>
   </div>
   <div class="search-section-divider">
@@ -767,17 +814,6 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
   <div id="search-anime-results" class="anime-grid">
     <div class="no-results">Type to search anime...</div>
   </div>
-  <div class="search-section-divider">
-    <div class="search-section-divider-label"><i class="fa fa-book-open"></i> Manga</div>
-  </div>
-  <!-- Manga search box -->
-  <div class="search-page-wrap" style="margin-bottom:14px">
-    <i class="fa fa-book-open search-page-icon"></i>
-    <input id="manga-search-page-input" type="text" placeholder="Search manga titles..." oninput="doMangaPageSearch(this.value)" autocomplete="off">
-    <button onclick="document.getElementById('manga-search-page-input').value='';loadSearchManga('')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px;border-radius:50%;transition:all 0.2s"><i class="fa fa-times"></i></button>
-  </div>
-  <div class="manga-genre-tabs" id="manga-genre-tabs"></div>
-  <div class="scroll-row" id="search-manga-results"><div class="section-loading"><div class="loading-spinner"></div></div></div>
 </div>
 </div>
 
@@ -790,6 +826,21 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
   <!-- Unlimited scroll grid -->
   <div class="genre-page-grid" id="genre-page-grid"><div class="section-loading"><div class="loading-spinner"></div></div></div>
   <button class="load-more-btn" id="genre-load-more" onclick="loadMoreGenreAnime()" style="display:none">Load More</button>
+</div>
+</div>
+
+<!-- ══════════════════════ MOVIES PAGE ══════════════════════ -->
+<div id="page-movies" class="page-section">
+<div style="padding:80px 40px 40px;position:relative;z-index:1">
+  <div class="search-page-title">Anime Movies</div>
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap" id="movies-filter-row">
+    <button class="genre-pill active" id="movies-filter-popular" onclick="switchMoviesFilter('popular',this)">🔥 Popular</button>
+    <button class="genre-pill" id="movies-filter-trending" onclick="switchMoviesFilter('trending',this)">⚡ Trending</button>
+    <button class="genre-pill" id="movies-filter-top" onclick="switchMoviesFilter('top',this)">⭐ Top Rated</button>
+    <button class="genre-pill" id="movies-filter-new" onclick="switchMoviesFilter('new',this)">🆕 New</button>
+  </div>
+  <div class="anime-grid" id="movies-page-grid"><div class="section-loading"><div class="loading-spinner"></div></div></div>
+  <button class="load-more-btn" id="movies-load-more" onclick="loadMoreMovies()" style="display:none">Load More</button>
 </div>
 </div>
 
@@ -880,8 +931,19 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
         <div class="modal-desc" id="modal-desc">—</div>
       </div>
       <div class="modal-info-card">
-        <div class="subsection-label" style="margin-bottom:12px">Episodes</div>
-        <div class="ep-list" id="ep-list"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div class="subsection-label">Episodes</div>
+          <div class="ep-count-badge" id="ep-count-badge"><i class="fa fa-film"></i> —</div>
+        </div>
+        <div class="ep-panel">
+          <div class="ep-search-row">
+            <input class="ep-search" id="ep-search" type="number" min="1" placeholder="Jump to ep #" oninput="epFilter(this.value)" onkeydown="if(event.key==='Enter')epJump()">
+            <button class="ep-jump-btn" onclick="epJump()">GO</button>
+          </div>
+          <div class="ep-range-tabs" id="ep-range-tabs"></div>
+          <div class="ep-grid" id="ep-list"></div>
+          <div class="ep-status" id="ep-status" style="display:none"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1030,8 +1092,8 @@ function showPage(page) {
     loadGenrePagePills();
     loadGenrePageAnime('Action');
   }
-  if (page === 'manga') {
-    loadMangaPageInit();
+  if (page === 'movies' && !document.getElementById('movies-page-grid').dataset.loaded) {
+    loadMoviesPage('popular');
   }
 }
 
@@ -1050,7 +1112,7 @@ async function initAll() {
   loadFamous();
   loadGenreHomePills();
   loadGenreHomeRow('Action');
-  loadMangaHomeRow();
+  loadMoviesHomeRow();
 }
 
 // ─── ANILIST ────────────────────────────────────────────────
@@ -1256,18 +1318,49 @@ function loadMoreGenreAnime() {
   loadGenrePageAnime(genrePageSelected, false);
 }
 
-// ─── MANGA (HOME ROW) ───────────────────────────────────────
-async function loadMangaHomeRow() {
-  const row = document.getElementById('manga-home-row');
-  // Use AniList manga for home row - always works, great covers
+// ─── MOVIES (HOME ROW) ──────────────────────────────────────
+async function loadMoviesHomeRow() {
+  const row = document.getElementById('movies-home-row');
   row.innerHTML = '';
-  const q = `query{Page(page:1,perPage:20){media(type:MANGA,sort:POPULARITY_DESC,isAdult:false){
-    id title{romaji english} coverImage{large extraLarge} averageScore chapters status
+  const q = `query{Page(page:1,perPage:20){media(type:ANIME,format:MOVIE,sort:POPULARITY_DESC,isAdult:false){
+    id title{romaji english} coverImage{large} averageScore episodes description(asHtml:false) genres
   }}}`;
   const d = await anilistQuery(q);
-  if (!d) { row.innerHTML = '<div class="no-results">Could not load manga.</div>'; return; }
-  d.Page.media.forEach(m => row.appendChild(makeAniListMangaCard(m, true)));
+  if (!d){row.innerHTML='<div class="no-results">Could not load.</div>';return}
+  d.Page.media.forEach((a,i) => row.appendChild(makeAnimeCard(a, true, i+1)));
   makeDraggable(row);
+}
+
+// ─── MOVIES PAGE ────────────────────────────────────────────
+let moviesFilter = 'popular';
+let moviesPageOffset = 0;
+const MOVIES_SORT_MAP = {popular:'POPULARITY_DESC', trending:'TRENDING_DESC', top:'SCORE_DESC', new:'START_DATE_DESC'};
+
+async function loadMoviesPage(filter, reset=true) {
+  moviesFilter = filter || moviesFilter;
+  const grid = document.getElementById('movies-page-grid');
+  if (reset) { grid.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>'; moviesPageOffset = 0; }
+  const sort = MOVIES_SORT_MAP[moviesFilter] || 'POPULARITY_DESC';
+  const page = Math.floor(moviesPageOffset/20)+1;
+  const q = `query($p:Int,$s:[MediaSort]){Page(page:$p,perPage:20){media(type:ANIME,format:MOVIE,sort:$s,isAdult:false){
+    id title{romaji english} coverImage{large} averageScore episodes description(asHtml:false) genres
+  }}}`;
+  const d = await anilistQuery(q, {p: page, s: [sort]});
+  if (reset) grid.innerHTML = '';
+  if (!d){grid.innerHTML='<div class="no-results">Could not load.</div>';return}
+  d.Page.media.forEach((a,i) => grid.appendChild(makeAnimeCard(a, false, moviesPageOffset+i+1)));
+  moviesPageOffset += d.Page.media.length;
+  document.getElementById('movies-load-more').style.display = d.Page.media.length >= 20 ? 'block' : 'none';
+  grid.dataset.loaded = '1';
+}
+
+function loadMoreMovies() { loadMoviesPage(moviesFilter, false); }
+
+function switchMoviesFilter(filter, btn) {
+  moviesFilter = filter;
+  document.querySelectorAll('#movies-filter-row .genre-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadMoviesPage(filter, true);
 }
 
 // ─── MANGA (FULL PAGE) ──────────────────────────────────────
@@ -2009,7 +2102,11 @@ async function openWatch(anime) {
   document.getElementById('modal-tags').innerHTML = '';
 
   // Show loading in ep list
-  document.getElementById('ep-list').innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
+  document.getElementById('ep-list').innerHTML = '<div class="ep-status" style="display:block">Loading episodes…</div>';
+  document.getElementById('ep-range-tabs').innerHTML = '';
+  document.getElementById('ep-count-badge').innerHTML = '<i class="fa fa-film"></i> …';
+  document.getElementById('ep-search').value = '';
+  epSearchVal = '';
   document.getElementById('season-select-wrap').style.display = 'none';
   document.getElementById('cast-section').style.display = 'none';
   document.getElementById('va-section').style.display = 'none';
@@ -2020,8 +2117,7 @@ async function openWatch(anime) {
 
   // Fetch full details from AniList
   const q = `query($id:Int){Media(id:$id){
-    genres description(asHtml:false) episodes nextAiringEpisode{episode}
-    streamingEpisodes{title}
+    genres description(asHtml:false) episodes nextAiringEpisode{episode} status format
     coverImage{large extraLarge}
     characters(perPage:12,sort:ROLE){nodes{name{full} image{medium} voiceActors(language:JAPANESE){name{full} image{medium}}}}
     recommendations(perPage:6){nodes{mediaRecommendation{id title{romaji english} coverImage{large}}}}
@@ -2032,7 +2128,7 @@ async function openWatch(anime) {
   if (!d || !d.Media) {
     // Fallback: use known episodes or default 12
     const fallbackEps = anime.episodes || 12;
-    buildEpList(fallbackEps);
+    buildEpList(fallbackEps, 1);
     document.getElementById('modal-desc').textContent = (anime.description||'').replace(/<[^>]+>/g,'').slice(0,200) || 'No description available.';
     return;
   }
@@ -2047,25 +2143,44 @@ async function openWatch(anime) {
   // Update poster if better version available
   if (m.coverImage?.extraLarge) document.getElementById('modal-poster').src = m.coverImage.extraLarge;
 
-  // Episodes: use nextAiringEpisode for ongoing, else m.episodes, fallback to anime.episodes
-  // For very long series (One Piece etc), check streaming episode count via relations
-  let totalEps = m.episodes || (m.nextAiringEpisode ? m.nextAiringEpisode.episode - 1 : null) || anime.episodes || 12;
-  
-  // If AniList reports null episodes but nextAiring exists, it's ongoing — use that
-  if (!m.episodes && m.nextAiringEpisode?.episode) {
+  // Episodes: use AniList data first, then fetch real count from Consumet
+  // AniList often returns null for long ongoing series like One Piece
+  let totalEps = 12;
+  if (m.episodes && m.episodes > 0) {
+    totalEps = m.episodes;
+  } else if (m.nextAiringEpisode?.episode) {
     totalEps = m.nextAiringEpisode.episode - 1;
+  } else if (anime.episodes && anime.episodes > 0) {
+    totalEps = anime.episodes;
   }
-  
-  // Use streamingEpisodes count if it's higher (covers long-running series like One Piece)
-  const streamCount = m.streamingEpisodes?.length || 0;
-  if (streamCount > totalEps) totalEps = streamCount;
-  
-  // For series where AniList episodes seems too low (like split cours), query streaming count
-  if (totalEps < 50 && !m.episodes && !m.nextAiringEpisode) {
-    totalEps = anime.episodes || 12;
-  }
-  
-  buildEpList(totalEps);
+
+  // Expanded hard-coded counts for popular long-runners (AniList IDs)
+  const KNOWN_EPS = {
+    21: 1100,    // One Piece
+    20: 720,     // Naruto
+    1735: 500,   // Naruto Shippuden
+    205: 366,    // Bleach
+    11757: 366,  // Bleach: TYBW treated separately
+    199: 366,    // Bleach original
+    6033: 300,   // Fairy Tail
+    14183: 100,  // Fairy Tail (2014)
+    31478: 51,   // Fairy Tail Final
+    4224: 271,   // Gintama
+    918: 148,    // FMA Brotherhood (+)
+    101922: 1000,// Black Clover extended
+    113415: 200, // Boruto
+  };
+  if (KNOWN_EPS[anime.id]) totalEps = KNOWN_EPS[anime.id];
+
+  // Build ep list immediately with best count we have
+  buildEpList(totalEps, 1);
+
+  // Fetch accurate count from multi-provider in background — updates if higher
+  fetchEpisodeCount(anime.id).then(count => {
+    if (count && count > epTotal) {
+      buildEpList(count, currentEp);
+    }
+  });
 
   // Seasons from relations
   currentSeasonsList = [{id: anime.id, title, episodes: totalEps}];
@@ -2141,27 +2256,146 @@ async function openWatch(anime) {
   }
 }
 
-function buildEpList(totalEps) {
-  const epList = document.getElementById('ep-list');
-  epList.innerHTML = '';
-  const total = totalEps || 12;
-  // Build episodes in batches for large counts (e.g. One Piece 1100+)
-  const BATCH = 50;
-  let rendered = 0;
-  function renderBatch() {
-    const end = Math.min(rendered + BATCH, total);
-    for (let i = rendered + 1; i <= end; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'ep-btn' + (i===1?' active':'');
-      btn.id = `ep-btn-${i}`;
-      btn.innerHTML = `<span class="ep-num">${String(i).padStart(2,'0')}</span><span class="ep-title">Episode ${i}</span>`;
-      btn.onclick = ()=>loadEpisode(i);
-      epList.appendChild(btn);
-    }
-    rendered = end;
-    if (rendered < total) requestAnimationFrame(renderBatch);
+// ─── EPISODE SYSTEM ─────────────────────────────────────────
+// State
+let epTotal = 0;
+let epCurrentRange = 0; // index into EP_RANGES
+let epSearchVal = '';
+const EP_RANGE_SIZE = 100;
+let watchedEps = {};  // key: `${animeId}-${ep}` → true
+
+// Build range tab labels e.g. ["1–100","101–200",…]
+function epRanges(total) {
+  const ranges = [];
+  for (let s = 1; s <= total; s += EP_RANGE_SIZE) {
+    ranges.push({start: s, end: Math.min(s + EP_RANGE_SIZE - 1, total)});
   }
-  renderBatch();
+  return ranges;
+}
+
+function buildEpList(total, activeEp) {
+  epTotal = total || 12;
+  epCurrentRange = activeEp ? Math.floor((activeEp - 1) / EP_RANGE_SIZE) : 0;
+  renderEpPanel(activeEp || currentEp || 1);
+}
+
+function renderEpPanel(activeEp) {
+  const grid = document.getElementById('ep-list');
+  const rangeTabs = document.getElementById('ep-range-tabs');
+  const badge = document.getElementById('ep-count-badge');
+  const status = document.getElementById('ep-status');
+
+  badge.innerHTML = `<i class="fa fa-film"></i> ${epTotal} eps`;
+  status.style.display = 'none';
+
+  // Build range tabs (only show if >EP_RANGE_SIZE eps)
+  rangeTabs.innerHTML = '';
+  const ranges = epRanges(epTotal);
+  if (ranges.length > 1) {
+    ranges.forEach((r, i) => {
+      const tab = document.createElement('button');
+      tab.className = 'ep-range-tab' + (i === epCurrentRange ? ' active' : '');
+      tab.textContent = `${r.start}–${r.end}`;
+      tab.onclick = () => { epCurrentRange = i; renderEpPanel(activeEp); };
+      rangeTabs.appendChild(tab);
+    });
+  }
+
+  // Render current range grid
+  grid.innerHTML = '';
+  const range = ranges[epCurrentRange] || ranges[0];
+  if (!range) return;
+
+  const filter = epSearchVal.trim();
+  let shown = 0;
+  for (let ep = range.start; ep <= range.end; ep++) {
+    // Filter: if search active, only show matching ep
+    if (filter !== '' && !String(ep).includes(filter)) continue;
+    const cell = document.createElement('div');
+    cell.className = 'ep-cell' + (ep === activeEp ? ' active' : '');
+    const key = `${currentAnime?.id}-${ep}`;
+    if (watchedEps[key]) cell.classList.add('watched');
+    cell.id = `ep-btn-${ep}`;
+    cell.textContent = ep;
+    cell.title = `Episode ${ep}`;
+    cell.onclick = () => loadEpisode(ep);
+    grid.appendChild(cell);
+    shown++;
+  }
+  if (shown === 0) {
+    status.textContent = filter ? `No episode matching "${filter}"` : 'No episodes in this range';
+    status.style.display = 'block';
+  }
+}
+
+function epJump() {
+  const input = document.getElementById('ep-search');
+  const val = parseInt(input.value);
+  if (!val || val < 1 || val > epTotal) {
+    input.style.borderColor = '#ff4444';
+    setTimeout(() => input.style.borderColor = '', 1000);
+    return;
+  }
+  input.value = '';
+  // Switch to correct range
+  epCurrentRange = Math.floor((val - 1) / EP_RANGE_SIZE);
+  loadEpisode(val);
+}
+
+function epFilter(val) {
+  epSearchVal = val;
+  renderEpPanel(currentEp);
+}
+
+// ─── FETCH REAL EPISODE COUNT (multi-provider) ───────────────
+// Strategy: try providers in order, take whichever returns highest count
+// Provider 1: Consumet /meta/anilist/info — returns totalEpisodes
+// Provider 2: Anify /anime/{id} — returns episodes array
+// Provider 3: AniList streamingEpisodes (last resort, usually low)
+async function fetchEpisodeCount(anilistId) {
+  const controllers = [];
+  const timeout = (ms) => {
+    const c = new AbortController();
+    controllers.push(c);
+    setTimeout(() => c.abort(), ms);
+    return c.signal;
+  };
+
+  const results = await Promise.allSettled([
+    // Consumet main instance
+    fetch(`https://api.consumet.org/meta/anilist/info/${anilistId}`, {signal: timeout(7000)})
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d) return 0;
+        // Consumet episodes array may be paginated — use totalEpisodes field
+        return d.totalEpisodes || d.episodes?.length || 0;
+      }),
+    // Consumet backup instance
+    fetch(`https://consumet.org/meta/anilist/info/${anilistId}`, {signal: timeout(7000)})
+      .then(r => r.ok ? r.json() : null)
+      .then(d => d?.totalEpisodes || d?.episodes?.length || 0)
+      .catch(() => 0),
+    // Anify API — returns full episodes list
+    fetch(`https://api.anify.tv/info/${anilistId}?fields=[episodes]`, {signal: timeout(7000)})
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d?.episodes) return 0;
+        // episodes is an array of providers, each with sub-list
+        let max = 0;
+        for (const src of Object.values(d.episodes)) {
+          if (Array.isArray(src) && src.length > max) max = src.length;
+        }
+        return max;
+      })
+      .catch(() => 0),
+  ]);
+
+  // Take the highest count from all providers
+  let best = 0;
+  for (const r of results) {
+    if (r.status === 'fulfilled' && r.value > best) best = r.value;
+  }
+  return best > 0 ? best : null;
 }
 
 function onSeasonChange(idx) {
@@ -2169,15 +2403,21 @@ function onSeasonChange(idx) {
   if (!s) return;
   currentAnime = {...currentAnime, id: s.id, title: {romaji: s.title, english: s.title}};
   document.getElementById('modal-header-title').textContent = s.title||'Now Playing';
-  buildEpList(s.episodes||12);
+  buildEpList(s.episodes || 12, 1);
   loadEpisode(1);
 }
 
 function loadEpisode(ep) {
   currentEp = ep;
-  document.querySelectorAll('.ep-btn').forEach(b=>b.classList.remove('active'));
-  const btn = document.getElementById(`ep-btn-${ep}`);
-  if (btn){btn.classList.add('active');btn.scrollIntoView({block:'nearest'})}
+  // Mark as watched
+  if (currentAnime?.id) watchedEps[`${currentAnime.id}-${ep}`] = true;
+  // Update active cell — re-render panel with new active ep
+  renderEpPanel(ep);
+  // Scroll active cell into view
+  requestAnimationFrame(() => {
+    const cell = document.getElementById(`ep-btn-${ep}`);
+    if (cell) cell.scrollIntoView({block:'nearest', behavior:'smooth'});
+  });
   document.getElementById('player-iframe').src = `https://megaplay.buzz/stream/ani/${currentAnime.id}/${ep}/${currentLang}`;
 }
 
@@ -2205,8 +2445,8 @@ window.addEventListener('message', function(event) {
 
 // Keyboard ESC
 document.addEventListener('keydown', e => {
-  if (e.key==='Escape'){closeWatch();closeTrailer();closeMangaReader()}
+  if (e.key==='Escape'){closeWatch();closeTrailer();}
 });
 </script>
 </body>
-  </html>
+      </html>
