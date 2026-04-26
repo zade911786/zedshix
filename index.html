@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Favicon -->
 <link rel="icon" type="image/png" href="zedshi.png">
 <link rel="shortcut icon" href="zedshi.png" type="image/png">
 <link rel="apple-touch-icon" href="zedshi.png">
@@ -807,7 +808,7 @@ footer{position:relative;z-index:1;padding:40px;text-align:center;border-top:1px
   <!-- Provider tabs -->
   <div class="manga-provider-tabs" id="manga-provider-tabs">
     <button class="manga-provider-tab active" data-provider="mangadex" onclick="switchMangaProvider('mangadex',this)"><i class="fa fa-database"></i> MangaDex</button>
-    <button class="manga-provider-tab" data-provider="comick" onclick="switchMangaProvider('comick',this)"><i class="fa fa-bolt"></i> Comick</button>
+    <button class="manga-provider-tab" data-provider="anilist" onclick="switchMangaProvider('anilist',this)"><i class="fa fa-fire"></i> AniList</button>
     <button class="manga-provider-tab" data-provider="trending" onclick="switchMangaProvider('trending',this)"><i class="fa fa-chart-line"></i> Trending</button>
     <button class="manga-provider-tab" data-provider="new" onclick="switchMangaProvider('new',this)"><i class="fa fa-star"></i> New Releases</button>
     <button class="manga-provider-tab" data-provider="completed" onclick="switchMangaProvider('completed',this)"><i class="fa fa-check-circle"></i> Completed</button>
@@ -1258,12 +1259,20 @@ function loadMoreGenreAnime() {
 // ─── MANGA (HOME ROW) ───────────────────────────────────────
 async function loadMangaHomeRow() {
   const row = document.getElementById('manga-home-row');
-  await fetchMangaDex(row, '?limit=20&contentRating[]=safe&order[followedCount]=desc&includes[]=cover_art&includes[]=manga&availableTranslatedLanguage[]=en', true);
+  // Use AniList manga for home row - always works, great covers
+  row.innerHTML = '';
+  const q = `query{Page(page:1,perPage:20){media(type:MANGA,sort:POPULARITY_DESC,isAdult:false){
+    id title{romaji english} coverImage{large extraLarge} averageScore chapters status
+  }}}`;
+  const d = await anilistQuery(q);
+  if (!d) { row.innerHTML = '<div class="no-results">Could not load manga.</div>'; return; }
+  d.Page.media.forEach(m => row.appendChild(makeAniListMangaCard(m, true)));
   makeDraggable(row);
 }
 
 // ─── MANGA (FULL PAGE) ──────────────────────────────────────
 let mangaPageOffset = 0;
+let mangaAniListPage = 1;
 let mangaCurrentSearch = '';
 let mangaInited = false;
 
@@ -1277,7 +1286,7 @@ function loadMangaPageInit() {
 
 function loadMangaPageGenres() {
   const g = document.getElementById('manga-page-genres');
-  const genres = ['All', ...Object.keys(MANGA_GENRE_IDS)];
+  const genres = ['All', ...ANILIST_MANGA_GENRES];
   genres.forEach(genre => {
     const btn = document.createElement('button');
     btn.className = 'manga-genre-filter' + (genre==='All'?' active':'');
@@ -1286,6 +1295,7 @@ function loadMangaPageGenres() {
       document.querySelectorAll('#manga-page-genres .manga-genre-filter').forEach(x=>x.classList.remove('active'));
       btn.classList.add('active');
       mangaGenreFilter = genre === 'All' ? '' : genre;
+      mangaAniListPage = 1;
       mangaPageOffset = 0;
       loadMangaPage(1, true);
     };
@@ -1295,24 +1305,41 @@ function loadMangaPageGenres() {
 
 async function loadMangaPage(page=1, reset=false) {
   const grid = document.getElementById('manga-page-grid');
-  if (reset) { grid.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>'; mangaPageOffset = 0; }
+  if (reset) { grid.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>'; mangaAniListPage = 1; mangaPageOffset = 0; }
   if (reset) grid.innerHTML = '';
 
-  // Route to Comick if selected
-  if (mangaProviderCurrent === 'comick') {
-    await fetchComick(grid, mangaCurrentSearch, mangaPageOffset, false);
-    mangaPageOffset += 20;
+  // AniList source
+  if (mangaProviderCurrent === 'anilist') {
+    const sort = 'POPULARITY_DESC';
+    const count = await fetchAniListManga(grid, mangaCurrentSearch, mangaAniListPage, mangaGenreFilter, sort, !reset);
+    if (count > 0) mangaAniListPage++;
+    document.getElementById('manga-load-more').style.display = count >= 24 ? 'block' : 'none';
     return;
   }
 
+  // AniList trending
+  if (mangaProviderCurrent === 'trending') {
+    const count = await fetchAniListManga(grid, mangaCurrentSearch, mangaAniListPage, mangaGenreFilter, 'TRENDING_DESC', !reset);
+    if (count > 0) mangaAniListPage++;
+    document.getElementById('manga-load-more').style.display = count >= 24 ? 'block' : 'none';
+    return;
+  }
+
+  // AniList new releases
+  if (mangaProviderCurrent === 'new') {
+    const count = await fetchAniListManga(grid, mangaCurrentSearch, mangaAniListPage, mangaGenreFilter, 'START_DATE_DESC', !reset);
+    if (count > 0) mangaAniListPage++;
+    document.getElementById('manga-load-more').style.display = count >= 24 ? 'block' : 'none';
+    return;
+  }
+
+  // MangaDex (default + completed)
   let url = `?limit=24&contentRating[]=safe&contentRating[]=suggestive&includes[]=cover_art&includes[]=manga&availableTranslatedLanguage[]=en&offset=${mangaPageOffset}`;
   if (mangaCurrentSearch) url += `&title=${encodeURIComponent(mangaCurrentSearch)}`;
   if (mangaGenreFilter && MANGA_GENRE_IDS[mangaGenreFilter]) url += `&includedTags[]=${MANGA_GENRE_IDS[mangaGenreFilter]}`;
-  if (mangaProviderCurrent === 'trending') url += '&order[relevance]=desc';
-  else if (mangaProviderCurrent === 'new') url += '&order[createdAt]=desc';
-  else if (mangaProviderCurrent === 'completed') { url += '&status[]=completed&order[followedCount]=desc'; }
+  if (mangaProviderCurrent === 'completed') url += '&status[]=completed&order[followedCount]=desc';
   else url += '&order[followedCount]=desc';
-  await fetchMangaDex(grid, url, false, true);
+  await fetchMangaDex(grid, url, false, !reset);
   mangaPageOffset += 24;
 }
 
@@ -1322,6 +1349,7 @@ function switchMangaProvider(prov, btn) {
   mangaProviderCurrent = prov;
   document.querySelectorAll('.manga-provider-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  mangaAniListPage = 1;
   mangaPageOffset = 0;
   mangaCurrentSearch = '';
   const searchEl = document.getElementById('manga-main-search');
@@ -1333,62 +1361,82 @@ function doMangaMainSearch(val) {
   clearTimeout(mangaPageTimer);
   mangaPageTimer = setTimeout(() => {
     mangaCurrentSearch = val.trim();
+    mangaAniListPage = 1;
     mangaPageOffset = 0;
     loadMangaPage(1, true);
   }, 500);
 }
 
-// ─── COMICK API ──────────────────────────────────────────────
-const COMICK = 'https://api.comick.io';
+// ─── ANILIST MANGA ────────────────────────────────────────────
+// AniList supports manga with the same GraphQL API - zero CORS issues
+const ANILIST_MANGA_GENRES = ['Action','Adventure','Comedy','Drama','Fantasy','Horror','Mystery','Romance','Sci-Fi','Slice of Life','Sports','Supernatural','Thriller','Mecha','Psychological','Isekai'];
 
-async function fetchComick(container, search='', offset=0, isRow=false) {
+async function fetchAniListManga(container, search='', page=1, genre='', sort='POPULARITY_DESC', appendMode=false) {
   try {
-    let url;
-    if (search) {
-      url = `${COMICK}/v1.0/search?q=${encodeURIComponent(search)}&limit=20&page=${Math.floor(offset/20)+1}&type=comic`;
-    } else {
-      url = `${COMICK}/v1.0/search?limit=20&page=${Math.floor(offset/20)+1}&type=comic&sort=follow`;
+    let mediaFilter = `type:MANGA, sort:${sort}, isAdult:false`;
+    if (search) mediaFilter += `, search:"${search.replace(/"/g,'')}"`;
+    if (genre) mediaFilter += `, genre:"${genre}"`;
+    const q = `query($p:Int){Page(page:$p,perPage:24){media(${mediaFilter}){
+      id title{romaji english} coverImage{large extraLarge} 
+      averageScore chapters volumes status description(asHtml:false) genres
+    }}}`;
+    const d = await anilistQuery(q, {p: page});
+    if (!appendMode) container.innerHTML = '';
+    const list = d?.Page?.media || [];
+    if (!list.length) {
+      if (!appendMode) container.innerHTML = '<div class="no-results">No manga found on AniList.</div>';
+      return 0;
     }
-    const r = await fetch(url);
-    const d = await r.json();
-    const items = Array.isArray(d) ? d : (d.data || d.comics || []);
-    if (!items.length) {
-      if (!offset) container.innerHTML = '<div class="no-results">No manga found on Comick.</div>';
-      return;
-    }
-    items.forEach(m => container.appendChild(makeComickCard(m, isRow)));
+    list.forEach(m => container.appendChild(makeAniListMangaCard(m)));
+    return list.length;
   } catch(e) {
-    if (!offset) container.innerHTML = '<div class="no-results">Comick unavailable. Try again.</div>';
+    console.error('AniList manga error:', e);
+    if (!appendMode) container.innerHTML = '<div class="no-results">AniList manga unavailable.</div>';
+    return 0;
   }
 }
 
-function makeComickCard(m, inRow=false) {
-  const coverId = m.md_covers?.[0]?.gpurl || m.md_covers?.[0]?.b2key;
-  const coverUrl = coverId
-    ? (coverId.startsWith('http') ? coverId : `https://meo.comick.pictures/${coverId}`)
-    : (m.cover_url || '');
+function makeAniListMangaCard(m, inRow=false) {
+  const cover = m.coverImage?.large || m.coverImage?.extraLarge || '';
   const placeholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='145' height='200'%3E%3Crect fill='%230a0a1a' width='145' height='200'/%3E%3Ctext x='72' y='100' text-anchor='middle' fill='%23977DFF' font-size='11' font-family='sans-serif'%3ENo Cover%3C/text%3E%3C/svg%3E`;
-  const title = m.title || m.slug?.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase()) || 'Unknown';
-  const status = m.status === 1 ? 'ongoing' : m.status === 2 ? 'completed' : 'unknown';
+  const title = m.title?.english || m.title?.romaji || 'Unknown';
+  const status = (m.status || 'unknown').toLowerCase();
+  const rating = m.averageScore ? `★ ${(m.averageScore/10).toFixed(1)}` : status;
   const card = document.createElement('div');
   card.className = 'manga-card';
   if (inRow) card.style.flexShrink = '0';
   const imgEl = document.createElement('img');
   imgEl.loading = 'lazy'; imgEl.alt = title;
-  imgEl.src = coverUrl || placeholder;
-  imgEl.onerror = function() { this.src = placeholder; this.onerror = null; };
+  imgEl.src = cover || placeholder;
+  imgEl.onerror = function(){ this.src = placeholder; this.onerror = null; };
   const info = document.createElement('div');
   info.className = 'manga-card-info';
-  const rating = m.rating ? `★ ${parseFloat(m.rating).toFixed(1)}` : status;
   info.innerHTML = `<div class="manga-card-title">${title}</div><div class="manga-card-meta">${rating}</div>`;
   card.appendChild(imgEl); card.appendChild(info);
   card.onclick = () => openMangaInfo({
-    source: 'comick', hid: m.hid || m.slug, slug: m.slug,
-    title, cover: coverUrl || placeholder,
-    rating: m.rating, status, desc: m.desc || m.parsed || '',
-    genres: m.genres?.map(g=>g.name||g) || []
+    source: 'anilist',
+    anilistId: m.id,
+    title,
+    cover: cover || placeholder,
+    rating: m.averageScore ? (m.averageScore/10).toFixed(1) : null,
+    status,
+    desc: (m.description||'').replace(/<[^>]+>/g,'').slice(0,400),
+    genres: m.genres || [],
+    chapters: m.chapters
   });
   return card;
+}
+
+// ─── MANGADEX CHAPTER SEARCH BY TITLE ────────────────────────
+// When user wants to read an AniList manga, we search MangaDex by title for chapters
+async function findMangaDexByTitle(title) {
+  try {
+    const encoded = encodeURIComponent(title);
+    const r = await fetch(`${MANGADEX}/manga?title=${encoded}&limit=5&contentRating[]=safe&contentRating[]=suggestive&includes[]=cover_art&availableTranslatedLanguage[]=en&order[relevance]=desc`);
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d.data?.[0] || null;
+  } catch(e) { return null; }
 }
 
 // ─── MANGA INFO MODAL ────────────────────────────────────────
@@ -1406,42 +1454,22 @@ async function openMangaInfo(data) {
   // Fill basic info immediately
   document.getElementById('mi-poster').src = data.cover || '';
   document.getElementById('mi-title').textContent = data.title || '—';
-  document.getElementById('mi-desc').textContent = data.desc ? data.desc.replace(/<[^>]+>/g,'').slice(0,300) : 'Loading details...';
+  document.getElementById('mi-desc').textContent = data.desc ? data.desc.replace(/<[^>]+>/g,'').slice(0,350) : 'Loading details...';
 
   // Badges
   const badges = document.getElementById('mi-badges');
   badges.innerHTML = '';
   if (data.rating) badges.innerHTML += `<span class="manga-info-badge rating">★ ${parseFloat(data.rating).toFixed(1)}</span>`;
   if (data.status) badges.innerHTML += `<span class="manga-info-badge status">${data.status}</span>`;
-  badges.innerHTML += `<span class="manga-info-badge source">${data.source === 'comick' ? '⚡ Comick' : '📖 MangaDex'}</span>`;
+  if (data.chapters) badges.innerHTML += `<span class="manga-info-badge status">${data.chapters} ch</span>`;
+  const sourceLabel = data.source === 'anilist' ? '🔥 AniList' : '📖 MangaDex';
+  badges.innerHTML += `<span class="manga-info-badge source">${sourceLabel}</span>`;
 
   // Genres
   const genresEl = document.getElementById('mi-genres');
-  genresEl.innerHTML = (data.genres||[]).slice(0,5).map(g=>`<span class="manga-info-genre">${g}</span>`).join('');
+  genresEl.innerHTML = (data.genres||[]).slice(0,6).map(g=>`<span class="manga-info-genre">${g}</span>`).join('');
 
   document.getElementById('manga-info-modal').classList.add('open');
-
-  // Fetch full details if Comick
-  if (data.source === 'comick' && data.hid) {
-    try {
-      const r = await fetch(`${COMICK}/comic/${data.hid}`);
-      const d = await r.json();
-      const comic = d.comic || d;
-      if (comic.desc || comic.parsed) {
-        document.getElementById('mi-desc').textContent = (comic.desc || comic.parsed || '').replace(/<[^>]+>/g,'').slice(0,300);
-      }
-      if (comic.md_covers?.[0]) {
-        const cov = comic.md_covers[0].gpurl || comic.md_covers[0].b2key;
-        if (cov) document.getElementById('mi-poster').src = cov.startsWith('http') ? cov : `https://meo.comick.pictures/${cov}`;
-      }
-      const genres = (comic.md_comic_md_genres||[]).map(g=>g.md_genres?.name).filter(Boolean);
-      if (genres.length) {
-        genresEl.innerHTML = genres.slice(0,6).map(g=>`<span class="manga-info-genre">${g}</span>`).join('');
-        currentMangaInfo.genres = genres;
-      }
-      currentMangaInfo.hid = comic.hid || data.hid;
-    } catch(e) { /* keep existing data */ }
-  }
 }
 
 async function toggleChapterPicker() {
@@ -1457,49 +1485,63 @@ async function toggleChapterPicker() {
   document.getElementById('mi-chapter-wrap').style.display = 'block';
   document.getElementById('mi-chapter-grid').innerHTML = '<div class="section-loading" style="padding:20px"><div class="loading-spinner"></div></div>';
 
-  if (currentMangaInfo.source === 'comick') {
-    await loadComickChapters(currentMangaInfo.hid);
+  if (currentMangaInfo.source === 'anilist') {
+    // Find on MangaDex by title, then load chapters
+    await loadChaptersForAniList(currentMangaInfo.title);
   } else {
+    // MangaDex card — mangaId is available directly
     await loadMangaDexChapters(currentMangaInfo.mangaId);
   }
 }
 
-async function loadComickChapters(hid) {
+async function loadChaptersForAniList(title) {
   const grid = document.getElementById('mi-chapter-grid');
   try {
-    const r = await fetch(`${COMICK}/comic/${hid}/chapters?lang=en&page=1&limit=200`);
-    const d = await r.json();
-    const chapters = d.chapters || d || [];
-    if (!chapters.length) { grid.innerHTML = '<div class="no-results" style="padding:20px">No English chapters found.</div>'; return; }
-    // Store for navigation
-    currentChapterList = chapters;
-    currentChapterIdx = 0;
-    grid.innerHTML = '';
-    chapters.forEach((ch, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'ch-pick-btn' + (i===0?' active':'');
-      btn.textContent = `Ch ${ch.chap || (i+1)}`;
-      btn.title = ch.title || `Chapter ${ch.chap || i+1}`;
-      btn.onclick = () => {
-        grid.querySelectorAll('.ch-pick-btn').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        closeMangaInfo();
-        openComickReader(hid, currentMangaInfo.title, i, chapters);
-      };
-      grid.appendChild(btn);
-    });
+    // Search MangaDex for this title
+    const manga = await findMangaDexByTitle(title);
+    if (!manga) {
+      grid.innerHTML = '<div class="no-results" style="padding:20px">Not found on MangaDex. Try searching manually.</div>';
+      return;
+    }
+    // Store the MangaDex ID for chapter loading
+    currentMangaInfo.mangaId = manga.id;
+    currentMangaInfo.source = 'mangadex'; // switch to mangadex reader from here
+    await loadMangaDexChapters(manga.id);
   } catch(e) {
-    grid.innerHTML = '<div class="no-results" style="padding:20px">Failed to load chapters.</div>';
+    console.error('AniList→MangaDex lookup error:', e);
+    grid.innerHTML = '<div class="no-results" style="padding:20px">Chapter lookup failed. Please search MangaDex directly.</div>';
   }
 }
 
 async function loadMangaDexChapters(mangaId) {
   const grid = document.getElementById('mi-chapter-grid');
+  if (!mangaId) { grid.innerHTML = '<div class="no-results" style="padding:20px">No manga ID found.</div>'; return; }
   try {
-    const r = await fetch(`${MANGADEX}/manga/${mangaId}/feed?translatedLanguage[]=en&order[chapter]=asc&limit=200`);
-    const d = await r.json();
-    const chapters = d.data || [];
-    if (!chapters.length) { grid.innerHTML = '<div class="no-results" style="padding:20px">No English chapters found.</div>'; return; }
+    // Fetch up to 500 chapters with pagination
+    let all = [];
+    let offset = 0;
+    const limit = 100;
+    while (true) {
+      const r = await fetch(`${MANGADEX}/manga/${mangaId}/feed?translatedLanguage[]=en&order[chapter]=asc&limit=${limit}&offset=${offset}&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica`);
+      if (!r.ok) break;
+      const d = await r.json();
+      const batch = d.data || [];
+      all = all.concat(batch);
+      if (batch.length < limit) break;
+      offset += limit;
+      if (all.length >= 500) break; // safety cap
+    }
+    if (!all.length) {
+      grid.innerHTML = '<div class="no-results" style="padding:20px">No English chapters found. Try the MangaDex tab.</div>';
+      return;
+    }
+    // Deduplicate by chapter number (keep highest quality)
+    const seen = new Map();
+    all.forEach(ch => {
+      const num = ch.attributes?.chapter || ch.id;
+      if (!seen.has(num)) seen.set(num, ch);
+    });
+    const chapters = [...seen.values()];
     currentChapterList = chapters;
     currentChapterIdx = 0;
     grid.innerHTML = '';
@@ -1518,6 +1560,7 @@ async function loadMangaDexChapters(mangaId) {
       grid.appendChild(btn);
     });
   } catch(e) {
+    console.error('MangaDex chapters error:', e);
     grid.innerHTML = '<div class="no-results" style="padding:20px">Failed to load chapters.</div>';
   }
 }
@@ -1527,61 +1570,6 @@ function closeMangaInfo() {
 }
 function closeMangaInfoIfOutside(e) {
   if (e.target === document.getElementById('manga-info-modal')) closeMangaInfo();
-}
-
-// ─── COMICK READER ──────────────────────────────────────────
-let comickChapters = [];
-let comickChapterIdx = 0;
-let comickHid = '';
-let comickTitle = '';
-
-async function openComickReader(hid, title, idx, chapters) {
-  comickHid = hid;
-  comickTitle = title;
-  comickChapters = chapters;
-  comickChapterIdx = idx;
-  document.getElementById('manga-reader-title').textContent = title;
-  document.getElementById('manga-modal').classList.add('open');
-  await loadComickChapterImages(idx);
-}
-
-async function loadComickChapterImages(idx) {
-  if (idx < 0 || idx >= comickChapters.length) return;
-  comickChapterIdx = idx;
-  const ch = comickChapters[idx];
-  const chNum = ch.chap || (idx+1);
-  document.getElementById('ch-label').textContent = `Chapter ${chNum}`;
-  document.getElementById('prev-ch-btn').disabled = idx === 0;
-  document.getElementById('next-ch-btn').disabled = idx === comickChapters.length - 1;
-  // Override nav buttons for comick
-  document.getElementById('prev-ch-btn').onclick = () => loadComickChapterImages(comickChapterIdx - 1);
-  document.getElementById('next-ch-btn').onclick = () => loadComickChapterImages(comickChapterIdx + 1);
-
-  const body = document.getElementById('manga-reader-body');
-  body.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
-  try {
-    const r = await fetch(`${COMICK}/chapter/${ch.hid}`);
-    const d = await r.json();
-    const images = d.chapter?.md_images || d.images || d.chapter?.images || [];
-    body.innerHTML = '';
-    if (!images.length) { body.innerHTML = '<div class="no-results" style="padding:40px">No images found.</div>'; return; }
-    images.forEach((img, pi) => {
-      const wrap = document.createElement('div');
-      wrap.className = 'manga-page';
-      const el = document.createElement('img');
-      el.loading = pi < 3 ? 'eager' : 'lazy';
-      el.alt = `Page ${pi+1}`;
-      // Comick image URL pattern
-      const b2key = img.b2key || img.name || img.url || '';
-      el.src = b2key.startsWith('http') ? b2key : `https://meo.comick.pictures/${b2key}`;
-      el.onerror = function() { this.style.display='none'; };
-      wrap.appendChild(el);
-      body.appendChild(wrap);
-    });
-    body.scrollTop = 0;
-  } catch(e) {
-    body.innerHTML = '<div class="no-results" style="padding:40px">Failed to load chapter images.</div>';
-  }
 }
 
 // ─── MANGADEX FETCH ─────────────────────────────────────────
@@ -1641,7 +1629,25 @@ function makeMangaCard(m, inRow=false) {
   info.innerHTML = `<div class="manga-card-title">${title}</div><div class="manga-card-meta">${attrs.status || 'ongoing'}</div>`;
   card.appendChild(imgEl);
   card.appendChild(info);
-  card.onclick = () => openMangaReader(m.id, title);
+  card.onclick = () => {
+    const mangaTitle = title;
+    const mangaId = m.id;
+    // Get genres from tags
+    const genreList = (attrs.tags || []).filter(t => t.attributes?.group === 'genre').map(t => t.attributes?.name?.en || '').filter(Boolean);
+    const statusStr = attrs.status || 'ongoing';
+    // Build description
+    const desc = attrs.description?.en || attrs.description?.['en-us'] || Object.values(attrs.description||{})[0] || '';
+    openMangaInfo({
+      source: 'mangadex',
+      mangaId,
+      title: mangaTitle,
+      cover: firstSrc,
+      rating: null,
+      status: statusStr,
+      desc,
+      genres: genreList
+    });
+  };
   return card;
 }
 
@@ -1748,7 +1754,7 @@ async function searchAnime(val) {
 
 function clearPageSearch() { document.getElementById('search-anime-results').innerHTML='<div class="no-results">Type to search anime...</div>'; }
 
-// Manga search on search page
+// Manga search on search page - use AniList as primary
 let mangaPageSearchTimer;
 function doMangaPageSearch(val) {
   clearTimeout(mangaPageSearchTimer);
@@ -1756,7 +1762,23 @@ function doMangaPageSearch(val) {
     const row = document.getElementById('search-manga-results');
     row.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
     if (!val.trim()) { await loadSearchManga(''); return; }
-    await fetchMangaDex(row, `?title=${encodeURIComponent(val.trim())}&limit=20&contentRating[]=safe&includes[]=cover_art&includes[]=manga&availableTranslatedLanguage[]=en&order[relevance]=desc`, true);
+    row.innerHTML = '';
+    // Search AniList manga
+    const q = `query($s:String){Page(page:1,perPage:20){media(type:MANGA,search:$s,isAdult:false,sort:SEARCH_MATCH){
+      id title{romaji english} coverImage{large extraLarge} averageScore chapters status description(asHtml:false) genres
+    }}}`;
+    const d = await anilistQuery(q, {s: val.trim()});
+    const list = d?.Page?.media || [];
+    if (list.length) {
+      list.forEach(m => row.appendChild(makeAniListMangaCard(m, true)));
+    } else {
+      // Fallback to MangaDex search
+      try {
+        await fetchMangaDex(row, `?title=${encodeURIComponent(val.trim())}&limit=20&contentRating[]=safe&contentRating[]=suggestive&includes[]=cover_art&includes[]=manga&availableTranslatedLanguage[]=en&order[relevance]=desc`, true);
+      } catch(e) {
+        row.innerHTML = '<div class="no-results">No manga found.</div>';
+      }
+    }
     makeDraggable(row);
   }, 400);
 }
@@ -1781,9 +1803,22 @@ function loadMangaGenreTabs() {
 async function loadSearchManga(genre) {
   const row = document.getElementById('search-manga-results');
   row.innerHTML = '<div class="section-loading"><div class="loading-spinner"></div></div>';
-  let url = `?limit=20&contentRating[]=safe&order[followedCount]=desc&includes[]=cover_art&includes[]=manga&availableTranslatedLanguage[]=en`;
-  if (genre && MANGA_GENRE_IDS[genre]) url += `&includedTags[]=${MANGA_GENRE_IDS[genre]}`;
-  await fetchMangaDex(row, url, true);
+  row.innerHTML = '';
+  // Use AniList for genre filtering - way more reliable than MangaDex
+  const q = genre
+    ? `query{Page(page:1,perPage:20){media(type:MANGA,genre:"${genre}",sort:POPULARITY_DESC,isAdult:false){
+        id title{romaji english} coverImage{large extraLarge} averageScore chapters status genres
+      }}}`
+    : `query{Page(page:1,perPage:20){media(type:MANGA,sort:POPULARITY_DESC,isAdult:false){
+        id title{romaji english} coverImage{large extraLarge} averageScore chapters status genres
+      }}}`;
+  const d = await anilistQuery(q);
+  const list = d?.Page?.media || [];
+  if (list.length) {
+    list.forEach(m => row.appendChild(makeAniListMangaCard(m, true)));
+  } else {
+    row.innerHTML = '<div class="no-results">No manga found.</div>';
+  }
   makeDraggable(row);
 }
 
@@ -1797,6 +1832,17 @@ function makeDraggable(el) {
 }
 
 // ─── MANGA READER ──────────────────────────────────────────
+// Opens MangaDex reader at a specific chapter index (called from info modal)
+function loadChapterByIdx(idx) {
+  const title = currentMangaInfo?.title || 'Manga';
+  document.getElementById('manga-reader-title').textContent = title;
+  document.getElementById('manga-modal').classList.add('open');
+  // Reset nav buttons to MangaDex mode
+  document.getElementById('prev-ch-btn').onclick = () => prevChapter();
+  document.getElementById('next-ch-btn').onclick = () => nextChapter();
+  loadChapter(idx);
+}
+
 async function openMangaReader(mangaId, title) {
   currentManga = mangaId;
   document.getElementById('manga-reader-title').textContent = title;
@@ -1975,6 +2021,7 @@ async function openWatch(anime) {
   // Fetch full details from AniList
   const q = `query($id:Int){Media(id:$id){
     genres description(asHtml:false) episodes nextAiringEpisode{episode}
+    streamingEpisodes{title}
     coverImage{large extraLarge}
     characters(perPage:12,sort:ROLE){nodes{name{full} image{medium} voiceActors(language:JAPANESE){name{full} image{medium}}}}
     recommendations(perPage:6){nodes{mediaRecommendation{id title{romaji english} coverImage{large}}}}
@@ -2001,7 +2048,23 @@ async function openWatch(anime) {
   if (m.coverImage?.extraLarge) document.getElementById('modal-poster').src = m.coverImage.extraLarge;
 
   // Episodes: use nextAiringEpisode for ongoing, else m.episodes, fallback to anime.episodes
-  const totalEps = m.episodes || (m.nextAiringEpisode ? m.nextAiringEpisode.episode - 1 : null) || anime.episodes || 12;
+  // For very long series (One Piece etc), check streaming episode count via relations
+  let totalEps = m.episodes || (m.nextAiringEpisode ? m.nextAiringEpisode.episode - 1 : null) || anime.episodes || 12;
+  
+  // If AniList reports null episodes but nextAiring exists, it's ongoing — use that
+  if (!m.episodes && m.nextAiringEpisode?.episode) {
+    totalEps = m.nextAiringEpisode.episode - 1;
+  }
+  
+  // Use streamingEpisodes count if it's higher (covers long-running series like One Piece)
+  const streamCount = m.streamingEpisodes?.length || 0;
+  if (streamCount > totalEps) totalEps = streamCount;
+  
+  // For series where AniList episodes seems too low (like split cours), query streaming count
+  if (totalEps < 50 && !m.episodes && !m.nextAiringEpisode) {
+    totalEps = anime.episodes || 12;
+  }
+  
   buildEpList(totalEps);
 
   // Seasons from relations
@@ -2081,14 +2144,24 @@ async function openWatch(anime) {
 function buildEpList(totalEps) {
   const epList = document.getElementById('ep-list');
   epList.innerHTML = '';
-  for (let i=1; i<=Math.min(totalEps||12,100); i++) {
-    const btn = document.createElement('button');
-    btn.className = 'ep-btn' + (i===1?' active':'');
-    btn.id = `ep-btn-${i}`;
-    btn.innerHTML = `<span class="ep-num">${String(i).padStart(2,'0')}</span><span class="ep-title">Episode ${i}</span>`;
-    btn.onclick = ()=>loadEpisode(i);
-    epList.appendChild(btn);
+  const total = totalEps || 12;
+  // Build episodes in batches for large counts (e.g. One Piece 1100+)
+  const BATCH = 50;
+  let rendered = 0;
+  function renderBatch() {
+    const end = Math.min(rendered + BATCH, total);
+    for (let i = rendered + 1; i <= end; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'ep-btn' + (i===1?' active':'');
+      btn.id = `ep-btn-${i}`;
+      btn.innerHTML = `<span class="ep-num">${String(i).padStart(2,'0')}</span><span class="ep-title">Episode ${i}</span>`;
+      btn.onclick = ()=>loadEpisode(i);
+      epList.appendChild(btn);
+    }
+    rendered = end;
+    if (rendered < total) requestAnimationFrame(renderBatch);
   }
+  renderBatch();
 }
 
 function onSeasonChange(idx) {
@@ -2136,4 +2209,4 @@ document.addEventListener('keydown', e => {
 });
 </script>
 </body>
-</html>
+  </html>
